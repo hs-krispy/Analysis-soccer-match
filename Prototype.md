@@ -30,4 +30,21 @@ print(X_train.shape, X_val.shape)
 
 DecisionTree를 제외하고 파라미터를 튜닝하지 않은 **대부분의 모델들이 45 ~ 47% 정도의 Accuracy를 보임**
 
-> 추후에 피처 엔지니어링과 모델 튜닝을 통해 성능 향상을 기대 가능
+**0708 ~ 1819 시즌 프리미어리그에 해당하는 데이터들로만 학습**
+
+```python
+df = df[df["Div"] == "E0"]
+# train - (3648, 23), validation - (912, 23)
+```
+
+- DecisionTree - 39.912%
+- Randomforest - 52.412%
+- LogisticRegression - 53.509%
+- xgboost - 48.026%
+- lightgbm - 51.206%
+- SVC - 54.715%
+- catboost - 50.548%
+
+마찬가지로 DecisionTree를 제외하고 파라미터를 튜닝하지 않은 **대부분의 모델들이 48 ~ 54% 정도의 Accuracy를 보임** (전체 데이터를 사용했을때에 비해서 성능이 약간 상승)
+
+> 추후에 피처 엔지니어링과 모델 튜닝을 통한 성능 향상을 기대할 수 있음
