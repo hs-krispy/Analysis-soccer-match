@@ -12,39 +12,37 @@
 - **Avg_HS, Avg_HST, Avg_HF, Avg_HC, Avg_HY, Avg_HR ... : 홈팀과 원정팀의 슈팅, 유효슈팅, 얻은 파울, 코너킥, 옐로 카드, 레드 카드에 대한 평균치**
   - 위의 두 항목은 데이터의 시작인 0708 시즌부터 마지막인 1920 시즌까지 한 경기를 치를때마다 계속 피처의 값을 갱신
 
-**0708 ~ 1819 시즌 데이터를 대상으로 대략적인 성능확인**
+**0708 ~ 1819 시즌 데이터를 이용해서 대략적인 성능확인**
 
-```python
-X_train, X_val, y_train, y_val = train_test_split(df.iloc[:, :-1], np.ravel(df.iloc[:, [-1]]), test_size=0.2, stratify=np.ravel(df.iloc[:, [-1]]), random_state=42)
-print(X_train.shape, X_val.shape)
-# (8946, 23) (2237, 23)
-```
+**shape - 11183 x 24**
 
-- DecisionTree - 38.936%
-- Randomforest - 46.67%
-- LogisticRegression - 47.743%
-- xgboost - 43.987%
-- lightgbm - 45.597%
-- SVC - 46.312%
-- catboost - 46.133%
+- DecisionTree - 47.105%
+- Randomforest - 50.526%
+- LogisticRegression - 52.368% (무승부는 예측하지 못함)
+- xgboost - 50.0%
+- lightgbm - 52.105%
+- SVC - 51.842% (무승부는 예측하지 못함)
+- catboost - 51.579%
 
-DecisionTree를 제외하고 파라미터를 튜닝하지 않은 **대부분의 모델들이 45 ~ 47% 정도의 Accuracy를 보임**
+DecisionTree를 제외하고 파라미터를 튜닝하지 않은 **대부분의 모델들이 50 ~ 52% 정도의 Accuracy를 보임**
 
-**0708 ~ 1819 시즌 프리미어리그에 해당하는 데이터들로만 학습**
+**0708 ~ 1819 시즌 데이터 중 프리미어리그에 해당하는 데이터들로만 학습**
+
+**shape - 4560 x 24**
 
 ```python
 df = df[df["Div"] == "E0"]
-# train - (3648, 23), validation - (912, 23)
 ```
 
-- DecisionTree - 39.912%
-- Randomforest - 52.412%
-- LogisticRegression - 53.509%
-- xgboost - 48.026%
-- lightgbm - 51.206%
-- SVC - 54.715%
-- catboost - 50.548%
+- DecisionTree - 43.158%
+- Randomforest - 50.0%
+- LogisticRegression - 51.842% (무승부는 예측하지 못함)
+- xgboost - 49.211%
+- lightgbm - 47.632%
+- SVC - 52.105% (무승부는 예측하지 못함)
+- catboost - 48.947%
 
-마찬가지로 DecisionTree를 제외하고 파라미터를 튜닝하지 않은 **대부분의 모델들이 48 ~ 54% 정도의 Accuracy를 보임** (전체 데이터를 사용했을때에 비해서 성능이 약간 상승)
+DecisionTree를 제외하고 파라미터를 튜닝하지 않은 **대부분의 모델들이 48 ~ 52% 정도의 Accuracy를 보임** (전체 데이터를 사용했을때에 비해서 성능이 약간 하락)
 
-> 추후에 피처 엔지니어링과 모델 튜닝을 통한 성능 향상을 기대할 수 있음
+> 예측 경향을 보았을때 무승부에 대한 부분을 거의 예측하지 못하고 대부분이 승과 패로 나뉘는 것을 볼 수 있었는데  feature engineering과 EDA를 통해 이 부분을 중심적으로 보완해야 함 
+
