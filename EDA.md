@@ -133,15 +133,15 @@ def plot(column, idx):
 
 **홈팀의 얻은 코너킥 평균치**
 
-<img src="C:\Users\salmon11\AppData\Roaming\Typora\typora-user-images\image-20210503171758102.png" width=90%/>
+<img src="https://user-images.githubusercontent.com/58063806/116855612-a4514b00-ac34-11eb-9cbf-eab23f5b8c85.png" width=90% />
 
 **홈팀의 옐로 카드 평균치**
 
-<img src="C:\Users\salmon11\AppData\Roaming\Typora\typora-user-images\image-20210503171818126.png" width=90%/>
+<img src="https://user-images.githubusercontent.com/58063806/116855648-b206d080-ac34-11eb-9c06-42023dbeec06.png" width=90% />
 
 **홈팀의 레드 카드 평균치**
 
-<img src="C:\Users\salmon11\AppData\Roaming\Typora\typora-user-images\image-20210503171839135.png" width=90% />
+<img src="https://user-images.githubusercontent.com/58063806/116855694-c21eb000-ac34-11eb-927c-12789c4118dc.png" width=90% />
 
 **원정팀의 슈팅 평균치**
 
