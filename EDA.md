@@ -191,12 +191,14 @@ def plot(column, idx):
 데이터가 많지 않은 상황에서 무승부나 패배에 비해 승리 데이터가 약 1700 ~ 2000개 가량 많은 것이 가장 큰 이유로 보임 
 
 - 또한 중요하다고 생각되는 H2H_record 값이 -1로 관측되는 데이터가 5767개로 절반이 넘어가는 문제가 있는데 이 부분은 상대전적 경기수를 3경기로 줄여서 데이터를 다시 생성할 필요가 있음
-  - 상대전적 경기수를 3경기로 줄여도 H2H_record 값이 -1로 관측되는 데이터가 3754개 발생
-
+  
+- 상대전적 경기수를 3경기로 줄여도 H2H_record 값이 -1로 관측되는 데이터가 3754개 발생
+  
 - H2H_record , L5_home_record, L5_away_record, L5_home_GF, L5_home_GA, L5_away_GF, L5_away_GA와 같이 이전 5경기를 기준으로 생성한 피처들은 이전 경기수가 이에 미치지 못하는 데이터들에 있어서는 -1로 일괄처리하는 대신 이전 경기에 대해 같은 방식을 적용해 볼 필요가 있음   
   - H2H_record는 여전히 1324개의 -1 값이 존재
   - <img src="https://user-images.githubusercontent.com/58063806/117410381-4d59b780-af4d-11eb-80d8-49a67c9a44f1.png" width=20% />
   - 나머지 피처들도 위와 같은 양의 결측치가 발생
+  
 - 또한 2부리그 경기에 대해서는 일괄적으로 0.8로 감소시키는 것보다 2부리그에 있던 팀이 프리미어리그에 승격해서 치르는 경기에 한정해서 피처 부분적으로 감소와 증가를 시켜볼 필요가 있음 **(리그 수준에 따른 가중치를 부여)**
   - 피처를 생성할 때 **해당 시점에 1부 리그에 있는 상태(1부 리그 경기)일 때 지난 경기 중 2부 리그에서 치른 경기에 대해 가중치 부여**
     - 승점, 득점, 슈팅, 유효슈팅은 80%로 감소
@@ -206,4 +208,33 @@ def plot(column, idx):
     - 실점은 80%로 감소
 
 - 전반적인 피처 수정 이후에도 성능에 큰 변화는 없음
+
   - 추가적인 피처 생성과 데이터를 더 늘릴 필요가 있어보임
+  - championship의 기록이 있는 0405 시즌부터 1819 시즌까지 train dataset (13774 row)
+
+  <img src="https://user-images.githubusercontent.com/58063806/117671758-1bae4e00-b1e4-11eb-9835-815221650b0a.png" width=13%/>
+
+  - 1920 시즌과 현재까지 기록이 있는 2021 시즌의 프리미어리그 경기를 대상으로 test dataset구성 (717 row)
+
+  <img src="https://user-images.githubusercontent.com/58063806/117671915-44cede80-b1e4-11eb-92b8-d885cf7781cd.png" width=13% />
+
+   
+
+#### Feature importance
+
+- Random forest
+
+<img src="https://user-images.githubusercontent.com/58063806/117673922-3681c200-b1e6-11eb-8768-300aa09624db.png" width=60% />
+
+- XGBoost
+
+<img src="https://user-images.githubusercontent.com/58063806/117674145-616c1600-b1e6-11eb-9df6-2f8d8391da83.png" width=60% />
+
+- LGBM
+
+<img src="https://user-images.githubusercontent.com/58063806/117674299-8496c580-b1e6-11eb-9983-f91b808c6a96.png" width=60% />
+
+- 레드카드에 대한 피처는 대부분 낮은 중요도를 보임
+- 예상외로 이전 5경기를 대상으로 구성한 피처들보다 전체의 평균치 피처들이 더 높은 중요도를 나타냄
+  - 이전 5경기를 대상으로 구성한 피처들의 결측치 때문으로 예상 (H2H_record는 1466개의 -1 값 존재)
+
