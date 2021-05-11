@@ -3,26 +3,28 @@
 승, 무, 패 세 가지 경우에 대해 각각 특정 column 별 확률밀도 확인
 
 ```python
-def plot(column, idx):
+def plot(df, column, idx):
     global set_width
     y_Max = 0
     x_Max = 0
     x_Min = 100
     for i in range(3):
-        values = np.round(TEST[TEST["RESULT"] == i][column], 1).value_counts().values / TEST[TEST["RESULT"] == i][column].shape[0]
-        y_Max = max(y_Max, np.round(values.max(), 1))
-        x_Max = max(x_Max, np.round(TEST[TEST["RESULT"] == i][column], 1).value_counts().index.max())
-        x_Min = min(x_Min, np.round(TEST[TEST["RESULT"] == i][column], 1).value_counts().index.min())
-        set_width = max(np.round(TEST[TEST["RESULT"] == i][column], 1).value_counts().index)
+        values = df[df["RESULT"] == i][column].value_counts().values / df[df["RESULT"] == i][column].shape[0]
+        y_Max = max(y_Max, values.max())
+        x_Max = max(x_Max, df[df["RESULT"] == i][column].value_counts().index.max())
+        x_Min = min(x_Min, df[df["RESULT"] == i][column].value_counts().index.min())
+        set_width = max(df[df["RESULT"] == i][column].value_counts().index)
     fig, axes = plt.subplots(1, 3, figsize=(15, 8))
     for i, (r, ax, c) in enumerate(zip(res, axes, color)):
-        print(np.round(TEST[TEST["RESULT"] == i][column], 1).value_counts())
-        index = np.round(TEST[TEST["RESULT"] == i][column], 1).value_counts().index.tolist()
-        values = np.round(TEST[TEST["RESULT"] == i][column], 1).value_counts().values / TEST[TEST["RESULT"] == i][column].shape[0]
-        if set_width >= 2.5:
-            ax.bar(index, values, width=0.2, color=c, label="{}".format(r))
-        else:
-            ax.bar(index, values, width=0.1, color=c, label="{}".format(r))
+        print(df[df["RESULT"] == i][column].value_counts())
+        index = df[df["RESULT"] == i][column].value_counts().index.tolist()
+        values = df[df["RESULT"] == i][column].value_counts().values / df[df["RESULT"] == i][column].shape[
+            0]
+        ax.bar(index, values, color=c, label="{}".format(r))
+        # if set_width >= 2.5:
+        #     ax.bar(index, values, width=0.2, color=c, label="{}".format(r))
+        # else:
+        #     ax.bar(index, values, width=0.1, color=c, label="{}".format(r))
         ax.set_xlabel("{}".format(column))
         ax.set_ylabel("bins")
         ax.set_xlim(x_Min, x_Max)
@@ -30,6 +32,76 @@ def plot(column, idx):
         ax.legend()
     plt.show()
 ```
+
+#### raw data
+
+**FTHG (풀타임 홈팀의 골 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117828439-c5591200-b2ac-11eb-915e-d7ac6c980150.png" width=90% />
+
+**FTAG (풀타임 원정팀의 골 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117828574-e588d100-b2ac-11eb-99b7-a97000864c83.png" width=90%/>
+
+**HTHG (전반 홈팀의 골 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117828676-018c7280-b2ad-11eb-838a-7ce987c76ace.png" width=90% />
+
+**HTAG (전반 원정팀의 골 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117828897-3993b580-b2ad-11eb-9ae9-608ac1ce079e.png" width=90% />
+
+**HS (홈팀의 슈팅 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117829049-592ade00-b2ad-11eb-9198-f9224dde7fcf.png" width=90% />
+
+**AS (원정팀의 슈팅 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117829193-7d86ba80-b2ad-11eb-943e-78645cf60986.png" width=90% />
+
+**HST (홈팀의 유효슈팅 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117829320-9e4f1000-b2ad-11eb-8a7c-5fa330c6fbed.png" width=90%/>
+
+**AST (원정팀의 유효슈팅 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117829448-ba52b180-b2ad-11eb-8d66-b06363bf5085.png" width=90% />
+
+**HF (홈팀이 얻은 파울 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117829540-d22a3580-b2ad-11eb-8dea-d510abc93e2c.png" width=90% />
+
+**AF (원정팀이 얻은 파울 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117829801-0d2c6900-b2ae-11eb-8a80-65888232cf28.png" width=90% />
+
+**HC (홈팀이 얻은 코너킥 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117829915-2503ed00-b2ae-11eb-9135-79265b00f6a2.png" width=90% />
+
+**AC (원정팀이 얻은 코너킥 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117830125-4c5aba00-b2ae-11eb-8a44-6dbf53956f1c.png" width=90% />
+
+**HY (홈팀의 옐로우카드 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117830196-5da3c680-b2ae-11eb-868e-24ff14392c13.png" width=90% />
+
+**AY (원정팀의 옐로우카드 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117830431-993e9080-b2ae-11eb-9bd2-f6a77130bef2.png" width=90% />
+
+**HR (홈팀의 레드카드 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117830533-b07d7e00-b2ae-11eb-81a5-3b7d5b21749c.png" width=90% />
+
+**AR (원정팀의 레드카드 수)**
+
+<img src="https://user-images.githubusercontent.com/58063806/117830666-d014a680-b2ae-11eb-966b-f2af033a1817.png" width=90% />
+
+**<u>골에 대한 데이터들을 제외하고는 승, 무, 패 데이터 간의 차이가 미미함</u>**
+
+
 
 **최근 5경기 상대전적**
 
