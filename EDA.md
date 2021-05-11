@@ -101,6 +101,57 @@ def plot(df, column, idx):
 
 **<u>골에 대한 데이터들을 제외하고는 승, 무, 패 데이터 간의 차이가 미미함</u>**
 
+#### 분산분석(ANOVA)을 통해 확인 
+
+- 각 집단의 데이터 개수가 비슷하고 데이터 분포가 정규 분포를 이루는 경우에 신뢰도가 높음
+- StandardScaler로 정규화를 진행 **(정규분포화)**
+- SMOTE로 oversampling 진행 **(데이터 개수 맞춤)**
+
+```python
+scaler = StandardScaler()
+scaled_train = scaler.fit_transform(train.iloc[:, 3:-1])
+scaled_train = pd.DataFrame(scaled_train, columns=data.columns[3:-1])
+sampler = SMOTE(random_state=42)
+df = sampler.fit_resample(scaled_train, train.iloc[:, [-1]])
+df = pd.concat([df[0], df[1]], axis=1)
+fstat, p_val = f_oneway(df.loc[df["RESULT"] == 0, df.columns[:-1]],
+                        df.loc[df["RESULT"] == 1, df.columns[:-1]],
+                        df.loc[df["RESULT"] == 2, df.columns[:-1]])
+```
+
+AC (원정팀이 얻은 코너킥 수) 데이터에 대해 p-value 0.73으로 유의수준 0.05을 초과 (귀무가설 채택)
+
+> 각 집단의 평균이 동일 (집단의 분류에 있어서 중요도가 떨어짐)
+
+#### 사후검정을 통해 확인
+
+- 특성별로 각 집단간의 차이 유무를 확인하기 위함
+
+```python
+for i in range(3, 19):
+    print(train.columns[i])
+    posthoc = pairwise_tukeyhsd(train.iloc[:, [i]], train.iloc[:, [-1]], alpha=0.05)
+    print(posthoc)
+    plt.figure(figsize=(10, 10))
+    posthoc.plot_simultaneous()
+    plt.title("{}".format(train.columns[i]))
+    plt.show()
+```
+
+<img src="https://user-images.githubusercontent.com/58063806/117858511-eaf41480-b2c8-11eb-8203-f606ae93ef87.png" width=40% />
+
+<img src="https://user-images.githubusercontent.com/58063806/117858638-09f2a680-b2c9-11eb-8471-103b4f4dee19.png" width=40% />
+
+<img src="https://user-images.githubusercontent.com/58063806/117858762-2989cf00-b2c9-11eb-8ffe-1e70712828bc.png" width=40% />
+
+- 위와 같이 파울, 코너킥, 옐로카드에 해당하는 특성들의 일부 집단이 동일한 것을 볼 수 있음
+- EX
+
+<img src="https://user-images.githubusercontent.com/58063806/117859224-b03eac00-b2c9-11eb-8399-f49f1f7b6327.png" width=70%/>
+
+- HF 특성은 승, 무, 패의 모든 경우에서 겹침 (모든 집단의 평균이 거의 동일하다고 판단)
+- **데이터의 분포를 시각화 했던 것과 유사한 결과가 나옴 (골과 슈팅을 제외한 데이터들은 각 집단간의 분포 차이가 크지 않음)** 
+
 
 
 **최근 5경기 상대전적**
