@@ -152,6 +152,67 @@ for i in range(3, 19):
 - HF 특성은 승, 무, 패의 모든 경우에서 겹침 (모든 집단의 평균이 거의 동일하다고 판단)
 - **데이터의 분포를 시각화 했던 것과 유사한 결과가 나옴 (골과 슈팅을 제외한 데이터들은 각 집단간의 분포 차이가 크지 않음)** 
 
+#### dataset 구성
+
+통계적 분석을 기반으로 파울, 코너킥, 옐로우카드에 대한 데이터를 제외한 풀타임 골, 전반전 골, 슈팅, 유효슈팅, 레드카드, pezzali score 그리고 추가적으로 HTR (전반전 결과)를 기반으로 데이터셋 생성
+
+> <img src="https://user-images.githubusercontent.com/58063806/118002520-a75de100-b382-11eb-8d4d-12df030c8bb3.png" width=60% />
+>
+> pezzali score - 홈팀의 공격시도 대비 골 * 원정팀의 공격시도 대비 골의 역수
+>
+> 공격과 수비에서 모두 효율적일수록 높은 pezzali score를 기록
+>
+> [참고문헌 - The harsh rule of the goals: data-driven performance indicators for football teams](The harsh rule of the goals: data-driven performance indicators for football teams)
+
+**홈팀 - 원정팀 방식으로 구성**
+
+**trainset**
+
+<img src="https://user-images.githubusercontent.com/58063806/117999658-079f5380-b380-11eb-817a-7dbd38095cd0.png" width=40%/>
+
+<img src="https://user-images.githubusercontent.com/58063806/117999855-3caba600-b380-11eb-912b-98c4ed86f54d.png" width=15% />
+
+**testset**
+
+<img src="https://user-images.githubusercontent.com/58063806/118000017-66fd6380-b380-11eb-8f66-6a4dc1b8896b.png" width=50% />
+
+<img src="https://user-images.githubusercontent.com/58063806/118000514-d6735300-b380-11eb-91f8-86336ed001d5.png" width=15% />
+
+(2 - 승리, 1 - 무승부, 0 - 패배)
+
+**testset의 구성방식**
+
+1. 해당 경기 홈팀과 원정팀의 이전 5경기 **맞대결 데이터들의 평균 값**
+2. 해당 경기 **홈팀의 이전 5경기 데이터 평균 값** - 해당 경기 **원정팀의 이전 5경기 데이터 평균 값**
+3. 해당 경기 **홈팀의 이전 홈 5경기 데이터 평균 값** - 해당 경기 **원정팀이 이전 원정 5경기 데이터 평균 값**
+4. 위의 세 방식을 모두 합산한 후 평균
+
+> 이전 5경기 데이터가 없는 경우는 있는 데이터 만큼만 평균, 아얘 없는 경우는 삭제
+
+testset을 구성하고 PCA를 이용해서 2차원으로 차원축소 후 각 집단별 데이터의 분포를 살펴보고 성능을 측정
+
+> Standardscaler로 데이터셋을 scaling 후 파라미터 튜닝을 거치지 않은 RandomForestClassifier를 사용해서 성능 측정
+
+**trainset 분포**
+
+<img src="https://user-images.githubusercontent.com/58063806/118004568-88f8e500-b384-11eb-859f-b78fe3e56122.png" width=60% />
+
+승리, 무승부, 패배의 경향이 어느 정도 구분되는 것을 볼 수 있음 
+
+**testset 분포**
+
+**실험결과 3번에 해당하는 방식에서 가장 유의미한 분포와 높은 정확도를 보임**
+
+<img src="https://user-images.githubusercontent.com/58063806/118001426-aed0ba80-b381-11eb-88dd-7df484a456cd.png" width=60% />
+
+<img src="https://user-images.githubusercontent.com/58063806/118001503-c1e38a80-b381-11eb-8238-4433c8b53c84.png" width=15% />
+
+**PCA를 진행하지 않고 기존의 7개의 피처를 이용한 결과**
+
+<img src="https://user-images.githubusercontent.com/58063806/118001857-12f37e80-b382-11eb-98a0-df83f6ef5564.png" width=15% />
+
+**위의 결과에서 승리, 무승부, 패배의 경향이 어느 정도 나타나는 것으로 보아 리그에 상관없이 프리미어리그 외에 다른 리그의 데이터들도 추가해서 데이터의 개수를 더 늘릴 수 있다고 판단됨**  
+
 
 
 **최근 5경기 상대전적**
