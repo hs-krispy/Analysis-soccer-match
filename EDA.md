@@ -145,7 +145,7 @@ for i in range(3, 19):
 <img src="https://user-images.githubusercontent.com/58063806/117858762-2989cf00-b2c9-11eb-8ffe-1e70712828bc.png" width=40% />
 
 - 위와 같이 파울, 코너킥, 옐로카드에 해당하는 특성들의 일부 집단이 동일한 것을 볼 수 있음
-- EX
+- EX)
 
 <img src="https://user-images.githubusercontent.com/58063806/117859224-b03eac00-b2c9-11eb-8399-f49f1f7b6327.png" width=70%/>
 
@@ -162,9 +162,9 @@ for i in range(3, 19):
 >
 > 공격과 수비에서 모두 효율적일수록 높은 pezzali score를 기록
 >
-> [참고문헌 - The harsh rule of the goals: data-driven performance indicators for football teams](The harsh rule of the goals: data-driven performance indicators for football teams)
+> 참고문헌 - The harsh rule of the goals: data-driven performance indicators for football teams
 
-**홈팀 - 원정팀 방식으로 구성**
+**홈팀 - 원정팀 방식으로 구성 (data label : 0 - 패배, 1 - 무승부, 2 - 승리)**
 
 **trainset**
 
@@ -191,7 +191,7 @@ for i in range(3, 19):
 
 testset을 구성하고 PCA를 이용해서 2차원으로 차원축소 후 각 집단별 데이터의 분포를 살펴보고 성능을 측정
 
-> Standardscaler로 데이터셋을 scaling 후 파라미터 튜닝을 거치지 않은 RandomForestClassifier를 사용해서 성능 측정
+> 파라미터 튜닝을 거치지 않은 RandomForestClassifier를 사용해서 성능 측정
 
 **trainset 분포**
 
@@ -211,7 +211,14 @@ testset을 구성하고 PCA를 이용해서 2차원으로 차원축소 후 각 �
 
 <img src="https://user-images.githubusercontent.com/58063806/118001857-12f37e80-b382-11eb-98a0-df83f6ef5564.png" width=15% />
 
-**위의 결과에서 승리, 무승부, 패배의 경향이 어느 정도 나타나는 것으로 보아 리그에 상관없이 프리미어리그 외에 다른 리그의 데이터들도 추가해서 데이터의 개수를 더 늘릴 수 있다고 판단됨**  
+<img src="https://user-images.githubusercontent.com/58063806/118833011-121b9900-b8fc-11eb-880f-3d3a167bc251.png" width=35% />
+
+> 실제로도 예측하기 가장 어렵다고 판단되는 무승부의 경우에는 36%의 f1-score를 보였지만 승리와 패배시에는 80% 정도의 f1-score를 보임
+
+- 위의 결과에서 승리, 무승부, 패배의 경향이 어느 정도 나타나는 것으로 보아 리그에 상관없이 프리미어리그 외에 다른 리그의 데이터들도 추가해서 데이터의 개수를 더 늘릴 수 있다고 판단됨
+- 또한 testset 구성방식에서 경기에 따라 가중치를 부여, 일부 방식을 혼합해서 사용 등 다양한 시도도 요구됨 
+
+  
 
 
 
