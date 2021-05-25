@@ -195,30 +195,26 @@ testset을 구성하고 PCA를 이용해서 2차원으로 차원축소 후 각 �
 
 **trainset 분포**
 
-<img src="https://user-images.githubusercontent.com/58063806/118004568-88f8e500-b384-11eb-859f-b78fe3e56122.png" width=60% />
+<img src="https://user-images.githubusercontent.com/58063806/119518805-d1b49300-bdb3-11eb-80e1-c243b202e1de.png" width=60% />
 
 승리, 무승부, 패배의 경향이 어느 정도 구분되는 것을 볼 수 있음 
-
-**testset 분포**
-
-**실험결과 3번에 해당하는 방식에서 가장 유의미한 분포와 높은 정확도를 보임**
-
-<img src="https://user-images.githubusercontent.com/58063806/118001426-aed0ba80-b381-11eb-88dd-7df484a456cd.png" width=60% />
-
-<img src="https://user-images.githubusercontent.com/58063806/118001503-c1e38a80-b381-11eb-8238-4433c8b53c84.png" width=15% />
-
-**PCA를 진행하지 않고 기존의 7개의 피처를 이용한 결과**
-
-<img src="https://user-images.githubusercontent.com/58063806/118001857-12f37e80-b382-11eb-98a0-df83f6ef5564.png" width=15% />
-
-<img src="https://user-images.githubusercontent.com/58063806/118833011-121b9900-b8fc-11eb-880f-3d3a167bc251.png" width=35% />
-
-> 실제로도 예측하기 가장 어렵다고 판단되는 무승부의 경우에는 36%의 f1-score를 보였지만 승리와 패배시에는 80% 정도의 f1-score를 보임
 
 - 위의 결과에서 승리, 무승부, 패배의 경향이 어느 정도 나타나는 것으로 보아 리그에 상관없이 프리미어리그 외에 다른 리그의 데이터들도 추가해서 데이터의 개수를 더 늘릴 수 있다고 판단됨
 - 또한 testset 구성방식에서 경기에 따라 가중치를 부여, 일부 방식을 혼합해서 사용 등 다양한 시도도 요구됨 
 
-  
+#### Data quantization
+
+<img src="https://user-images.githubusercontent.com/58063806/119519053-117b7a80-bdb4-11eb-80df-2af97f634f66.png" width=50% />
+
+<img src="https://user-images.githubusercontent.com/58063806/119519288-438cdc80-bdb4-11eb-96bf-d1fc64af1c36.png" width=50% />
+
+<img src="https://user-images.githubusercontent.com/58063806/119519401-59020680-bdb4-11eb-8a63-1df7ddecb094.png" width=50% />
+
+<img src="https://user-images.githubusercontent.com/58063806/119519343-4e477180-bdb4-11eb-9a17-7b8bc03f207d.png" width=50% />
+
+SD(슈팅 시도의 차이)를 제외하고는 무승부를 중심으로 승리와 패배 레이블은 확실히 구분되는 분포를 보임 
+
+
 
 
 
