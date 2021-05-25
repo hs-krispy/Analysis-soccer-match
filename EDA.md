@@ -204,6 +204,8 @@ testset을 구성하고 PCA를 이용해서 2차원으로 차원축소 후 각 �
 
 #### Data quantization
 
+- 연속형 데이터에 대해 각각 10개의 구간으로 나눠서 분포를 살펴봄
+
 <img src="https://user-images.githubusercontent.com/58063806/119519053-117b7a80-bdb4-11eb-80df-2af97f634f66.png" width=50% />
 
 <img src="https://user-images.githubusercontent.com/58063806/119519288-438cdc80-bdb4-11eb-96bf-d1fc64af1c36.png" width=50% />
