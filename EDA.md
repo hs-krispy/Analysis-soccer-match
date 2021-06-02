@@ -152,6 +152,48 @@ for i in range(3, 19):
 - HF 특성은 승, 무, 패의 모든 경우에서 겹침 (모든 집단의 평균이 거의 동일하다고 판단)
 - **데이터의 분포를 시각화 했던 것과 유사한 결과가 나옴 (골과 슈팅을 제외한 데이터들은 각 집단간의 분포 차이가 크지 않음)** 
 
+#### Data quantization
+
+- 연속형 데이터에 대해 각각 10개의 구간으로 나눠서 분포를 살펴봄
+
+<img src="https://user-images.githubusercontent.com/58063806/119519053-117b7a80-bdb4-11eb-80df-2af97f634f66.png" width=50% />
+
+<img src="https://user-images.githubusercontent.com/58063806/119519288-438cdc80-bdb4-11eb-96bf-d1fc64af1c36.png" width=50% />
+
+<img src="https://user-images.githubusercontent.com/58063806/119519401-59020680-bdb4-11eb-8a63-1df7ddecb094.png" width=50% />
+
+<img src="https://user-images.githubusercontent.com/58063806/119519343-4e477180-bdb4-11eb-9a17-7b8bc03f207d.png" width=50% />
+
+SD(슈팅 시도의 차이)를 제외하고는 무승부를 중심으로 승리와 패배 레이블은 확실히 구분되는 분포를 보임 
+
+#### Data Correlation
+
+<img src="https://user-images.githubusercontent.com/58063806/120439266-49d71600-c3bd-11eb-8df8-f53a51d276eb.png" width=70% />
+
+**홈팀과 원정팀의 차이**
+
+- HTR : 하프타임 종료 후 결과
+- FGD : 풀타임 득점 수
+- 2HGD : 후반전 득점 수
+- HGD : 전반전 득점 수
+- SD : 슈팅 수
+- STD : 유효슈팅 수
+- Pezzali
+
+> 위의 피처들은 비교적 높은 상관관계를 가짐을 볼 수 있음 (일반적으로 슈팅횟수와 골은 비례하기 때문이라고 생각됨)
+
+**홈팀과 원정팀 고유의 값**
+
+- HP : 홈팀의 이전 10경기 누적 승점 
+
+- AP : 원정팀의 이전 10경기 누적 승점
+
+> AP를 제외한 피처들이 경기결과에 있어서 약한 양적 상관관계를 보임
+>
+> AP는 원점팀의 승점이므로 이것이 크면 패배의 확률이 올라간다고 생각, 그러므로 홈을 중심으로 생성한 나머지 피처들과 경기결과에 있어서 약한 양적 상관관계를 보임  
+
+<img src="https://user-images.githubusercontent.com/58063806/120441027-1e552b00-c3bf-11eb-9502-7790ebc410d1.png" width=100%/>
+
 #### dataset 구성
 
 통계적 분석을 기반으로 파울, 코너킥, 옐로우카드에 대한 데이터를 제외한 풀타임 골, 전반전 골, 슈팅, 유효슈팅, 레드카드, pezzali score 그리고 추가적으로 HTR (전반전 결과)를 기반으로 데이터셋 생성
@@ -195,38 +237,72 @@ testset을 구성하고 PCA를 이용해서 2차원으로 차원축소 후 각 �
 
 **trainset 분포**
 
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
+
 <img src="https://user-images.githubusercontent.com/58063806/119518805-d1b49300-bdb3-11eb-80e1-c243b202e1de.png" width=60% />
+
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR, HP, AP
+
+<img src="https://user-images.githubusercontent.com/58063806/120449087-34ff8000-c3c7-11eb-8922-46e71d8e6b25.png" width=60% />
 
 승리, 무승부, 패배의 경향이 어느 정도 구분되는 것을 볼 수 있음 
 
 - 위의 결과에서 승리, 무승부, 패배의 경향이 어느 정도 나타나는 것으로 보아 리그에 상관없이 프리미어리그 외에 다른 리그의 데이터들도 추가해서 데이터의 개수를 더 늘릴 수 있다고 판단됨
 - 또한 testset 구성방식에서 경기에 따라 가중치를 부여, 일부 방식을 혼합해서 사용 등 다양한 시도도 요구됨 
 
-#### Data quantization
+**testset 분포**
 
-- 연속형 데이터에 대해 각각 10개의 구간으로 나눠서 분포를 살펴봄
+1번과 3번의 방식을 혼합해서 testset을 구성
 
-<img src="https://user-images.githubusercontent.com/58063806/119519053-117b7a80-bdb4-11eb-80df-2af97f634f66.png" width=50% />
+**(이전 데이터에 해당하는 5경기에서 승, 무, 패의 빈도를 곱해줌으로써 가중치를 부여)**
 
-<img src="https://user-images.githubusercontent.com/58063806/119519288-438cdc80-bdb4-11eb-96bf-d1fc64af1c36.png" width=50% />
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
 
-<img src="https://user-images.githubusercontent.com/58063806/119519401-59020680-bdb4-11eb-8a63-1df7ddecb094.png" width=50% />
+<img src="https://user-images.githubusercontent.com/58063806/120442079-37aaa700-c3c0-11eb-99bc-9d91fde756e5.png" width=60%/>
 
-<img src="https://user-images.githubusercontent.com/58063806/119519343-4e477180-bdb4-11eb-9a17-7b8bc03f207d.png" width=50% />
+```python
+confusion matrix
+[[160   4  84]
+ [ 83  14  75]
+ [ 95   9 193]]
+acc - 51.185%
+```
 
-SD(슈팅 시도의 차이)를 제외하고는 무승부를 중심으로 승리와 패배 레이블은 확실히 구분되는 분포를 보임 
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR, HP, AP
 
-#### Data Correlation
+<img src="https://user-images.githubusercontent.com/58063806/120444013-2ebad500-c3c2-11eb-86ff-c406a5556324.png" width=60%/>
 
-<img src="https://user-images.githubusercontent.com/58063806/119679749-9087b600-be7b-11eb-8370-2ae50394565f.png" width=60% />
+```python
+confusion matrix
+[[159   4  84]
+ [ 83  11  75]
+ [ 95   9 189]]
+acc - 50.635%
+```
 
-GpSTD(골 당 유효슈팅 수) : 모든 피처와의 상관관계가 거의 없음
+**feature importance**
 
-Pezzali : GpSTD를 제외한 나머지 피처와의 관계가 0.5 정도로 GpSTD를 제외한 다른 피처들보다는 비교적 적은 상관관계를 가짐
+<img src="https://user-images.githubusercontent.com/58063806/120449161-29fa1f00-c3ca-11eb-9ce0-02b831755295.PNG" width=60% />
 
-<img src="https://user-images.githubusercontent.com/58063806/119679097-0b9c9c80-be7b-11eb-8edc-e0933deffa43.png" width=90% />
+- 추가적으로 홈팀과 원정팀의 3경기, 5경기에 대한 연승과 연패에 해당하는 피처를 다음과 같이 구성했으나 학습에 영향을 미치지 않음  
 
+<img src="https://user-images.githubusercontent.com/58063806/120442928-1ac2a380-c3c1-11eb-8450-0292ba5963f3.png" width=100% />
 
+- 승리와 패배시에도 접전의 경우나 예측하기 힘든 결과가 나오는 경우 때문에 분포의 중앙부분에서 보다시피 승리, 무승부, 패배를 예측하지 못하는 것으로 보임
+
+**승, 패에 대한 이진 분류**
+
+- 데이터에서 승리한 label의 개수가 가장 많았기 때문에 무승부를 패배로 변환
+  - FGD, 2HGD, HGD, SD, STD, Pezzali, HTR, HP, AP
+
+<img src="https://user-images.githubusercontent.com/58063806/120446215-4c893980-c3c4-11eb-99b6-ef77ecf4e08b.png" width=60%s />
+
+```python
+confusion matrix
+[[254 162]
+ [105 188]]
+acc - 62.341%
+```
 
 
 
