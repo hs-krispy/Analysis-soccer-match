@@ -280,16 +280,6 @@ confusion matrix
 acc - 50.635%
 ```
 
-**feature importance**
-
-<img src="https://user-images.githubusercontent.com/58063806/120449161-29fa1f00-c3ca-11eb-9ce0-02b831755295.PNG" width=60% />
-
-- 추가적으로 홈팀과 원정팀의 3경기, 5경기에 대한 연승과 연패에 해당하는 피처를 다음과 같이 구성했으나 학습에 영향을 미치지 않음  
-
-<img src="https://user-images.githubusercontent.com/58063806/120442928-1ac2a380-c3c1-11eb-8450-0292ba5963f3.png" width=100% />
-
-- 승리와 패배시에도 접전의 경우나 예측하기 힘든 결과가 나오는 경우 때문에 분포의 중앙부분에서 보다시피 승리, 무승부, 패배를 예측하지 못하는 것으로 보임
-
 **승, 패에 대한 이진 분류**
 
 - 데이터에서 승리한 label의 개수가 가장 많았기 때문에 무승부를 패배로 변환
@@ -303,6 +293,44 @@ confusion matrix
  [105 188]]
 acc - 62.341%
 ```
+
+**feature importance**
+
+<img src="https://user-images.githubusercontent.com/58063806/120449161-29fa1f00-c3ca-11eb-9ce0-02b831755295.PNG" width=60% />
+
+- 추가적으로 홈팀과 원정팀의 3경기, 5경기에 대한 연승과 연패에 해당하는 피처를 다음과 같이 구성했으나 학습에 영향을 미치지 않음  
+
+<img src="https://user-images.githubusercontent.com/58063806/120442928-1ac2a380-c3c1-11eb-8450-0292ba5963f3.png" width=100% />
+
+- 승리와 패배시에도 접전의 경우나 예측하기 힘든 결과가 나오는 경우 때문에 분포의 중앙부분에서 보다시피 승리, 무승부, 패배를 예측하지 못하는 것으로 보임
+
+**지난 5경기 중 최근의 경기에 더 많은 가중치를 주기위해 지수이동평균을 적용**
+
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
+- 지난 5경기의 맞대결 데이터만 이용
+
+<img src="https://user-images.githubusercontent.com/58063806/120754703-02c95c00-c548-11eb-807f-149b79f12d8d.png" width=60%/>
+
+```python
+confusion matrix
+[[155  26  67]
+ [ 70  43  59]
+ [ 77  42 178]]
+acc - 52.441%
+```
+
+**승리와 패배에 대한 이진 분류**
+
+<img src="https://user-images.githubusercontent.com/58063806/120758604-001d3580-c54d-11eb-88e7-444ff9fe65c6.png" width=60% />
+
+```python
+confusion matrix
+[[288 132]
+ [116 181]]
+acc - 65.411%
+```
+
+기존의 결과에 비해 약간의 정확도 상승을 보임
 
 
 
