@@ -280,7 +280,7 @@ confusion matrix
 acc - 50.635%
 ```
 
-**승, 패에 대한 이진 분류**
+**승리와 나머지에 대한 이진 분류**
 
 - 데이터에서 승리한 label의 개수가 가장 많았기 때문에 무승부를 패배로 변환
   - FGD, 2HGD, HGD, SD, STD, Pezzali, HTR, HP, AP
@@ -304,7 +304,7 @@ acc - 62.341%
 
 - 승리와 패배시에도 접전의 경우나 예측하기 힘든 결과가 나오는 경우 때문에 분포의 중앙부분에서 보다시피 승리, 무승부, 패배를 예측하지 못하는 것으로 보임
 
-**지난 5경기 중 최근의 경기에 더 많은 가중치를 주기위해 지수이동평균을 적용**
+#### 지난 5경기 중 최근의 경기에 더 많은 가중치를 주기위해 지수이동평균을 적용
 
 - FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
 - 지난 5경기의 맞대결 데이터만 이용
@@ -319,7 +319,7 @@ confusion matrix
 acc - 52.441%
 ```
 
-**승리와 패배에 대한 이진 분류**
+**승리와 나머지에 대한 이진 분류**
 
 <img src="https://user-images.githubusercontent.com/58063806/120758604-001d3580-c54d-11eb-88e7-444ff9fe65c6.png" width=60% />
 
@@ -331,6 +331,104 @@ acc - 65.411%
 ```
 
 기존의 결과에 비해 약간의 정확도 상승을 보임
+
+**무승부 data를 제외한 결과**
+
+- 10091개의 데이터로 줄어듬 (testset 545개)
+
+<img src="https://user-images.githubusercontent.com/58063806/120760933-a2d6b380-c54f-11eb-9c6d-42154872d2f0.png" width=60% />
+
+```python
+confusion matrix
+[[164  84]
+ [100 197]]
+acc - 66.239%
+```
+
+**2차원으로 축소된 해당 데이터로 학습**
+
+```python
+confusion matrix
+[[160  88]
+ [ 89 208]]
+acc - 67.523%
+```
+
+**동일한 데이터를 3차원으로 축소하고 해당 데이터로 학습**
+
+```python
+confusion matrix
+[[161  87]
+ [ 94 203]]
+acc - 66.789%
+```
+
+**동일한 데이터를 4차원으로 축소하고 해당 데이터로 학습**
+
+```python
+confusion matrix
+[[169  79]
+ [ 99 198]]
+acc - 67.339%
+```
+
+**동일한 데이터를 5차원으로 축소하고 해당 데이터로 학습**
+
+```python
+confusion matrix
+[[166  82]
+ [102 195]]
+acc - 66.239%
+```
+
+**2차원으로 차원축소를 진행한 데이터로 학습한 경우에 가장 좋은 결과를 보임**
+
+#### oversampling
+
+- 무승부 데이터를 제거하고 승리와 패배에 해당하는 데이터로만 학습을 진행할 때에 승리 6173개, 패배 3918개로 2200개 가량의 데이터가 차이가 발생
+- SMOTE를 이용해 k_neighbors에 2 ~ 5까지 변화를 주면서 trainset의 결정경계 변화를 확인
+
+**oversampling을 적용하지 않았을 때** 
+
+<img src="https://user-images.githubusercontent.com/58063806/120773950-bf2d1d00-c55c-11eb-8f0e-733eb8215f58.png" width=60%, rotation=90/>
+
+```python
+acc - 67.523%
+```
+
+**k_neighbors 2 일 때**
+
+<img src="https://user-images.githubusercontent.com/58063806/120765217-f3501000-c553-11eb-8b95-fe8c948452cb.png" width=60% />
+
+```python 
+acc - 66.606%
+```
+
+**k_neighbors 3 일 때**
+
+<img src="https://user-images.githubusercontent.com/58063806/120765381-1da1cd80-c554-11eb-8aab-c5fbc6d00206.png" width=60% />
+
+```python
+acc - 66.606%
+```
+
+**k_neighbors 4 일 때**
+
+<img src="https://user-images.githubusercontent.com/58063806/120765520-42964080-c554-11eb-8715-579302fb05fa.png" width=60% />
+
+```python
+acc - 66.972%
+```
+
+**k_neighbors 5 일 때**
+
+<img src="https://user-images.githubusercontent.com/58063806/120765766-7ec9a100-c554-11eb-8a9b-5e1792c95344.png" width=60% />
+
+```python
+acc - 66.972%
+```
+
+위의 결과로 볼 때 오버샘플링을 적용한 모든 경우에서 결정경계, 성능에 거의 차이가 없었고 기존의 성능이 더 높은 것을 확인 
 
 
 
