@@ -208,13 +208,13 @@ SD(슈팅 시도의 차이)를 제외하고는 무승부를 중심으로 승리�
 
 **홈팀 - 원정팀 방식으로 구성 (data label : 0 - 패배, 1 - 무승부, 2 - 승리)**
 
-**trainset**
+**trainset example**
 
 <img src="https://user-images.githubusercontent.com/58063806/117999658-079f5380-b380-11eb-817a-7dbd38095cd0.png" width=40%/>
 
 <img src="https://user-images.githubusercontent.com/58063806/117999855-3caba600-b380-11eb-912b-98c4ed86f54d.png" width=15% />
 
-**testset**
+**testset example**
 
 <img src="https://user-images.githubusercontent.com/58063806/118000017-66fd6380-b380-11eb-8f66-6a4dc1b8896b.png" width=50% />
 
@@ -252,51 +252,76 @@ testset을 구성하고 PCA를 이용해서 2차원으로 차원축소 후 각 �
 
 **testset 분포**
 
-1번과 3번의 방식을 혼합해서 testset을 구성
+- 1번과 3번의 방식을 혼합해서 testset을 구성
+
+- (1번 - 0.8, 3번 - 0.2), (1번 - 0.5, 3번 0.5), (1번 - 0.2, 3번 0.8) 세 경우 중 가장 성능이 좋았던 **1번 방식 0.8, 3번 방식 0.2의 비율**로 학습 진행
 
 **(이전 데이터에 해당하는 5경기에서 승, 무, 패의 빈도를 곱해줌으로써 가중치를 부여)**
 
 - FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
+  - 1번 방식 0.8, 3번 방식 0.2의 비율
 
-<img src="https://user-images.githubusercontent.com/58063806/120442079-37aaa700-c3c0-11eb-99bc-9d91fde756e5.png" width=60%/>
+<img src="https://user-images.githubusercontent.com/58063806/120833163-6ed5af80-c59c-11eb-9073-cbbeb381b59a.png" width=60% />
 
 ```python
 confusion matrix
 [[160   4  84]
- [ 83  14  75]
- [ 95   9 193]]
-acc - 51.185%
+ [ 86  11  75]
+ [ 96  10 191]]
+acc - 50.488%
 ```
 
-- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR, HP, AP
+- FTHG, 2HTHG, HTHG, HS, HST, FTAG, 2HTAG, HTAG, AS, AST, HTR, FGD, 2HGD, HGD, SD, STD,    Pezzali
 
-<img src="https://user-images.githubusercontent.com/58063806/120444013-2ebad500-c3c2-11eb-86ff-c406a5556324.png" width=60%/>
+<img src="https://user-images.githubusercontent.com/58063806/120833088-58c7ef00-c59c-11eb-9214-37c7a4874678.png" width=60% />
+
+```python
+[[160   4  84]
+ [ 86  11  75]
+ [ 96  10 191]]
+acc - 50.488%
+```
+
+홈팀과 원정팀의 차이에 대한 피처외에 홈팀과 원정팀 각각의 피처를 추가했으나 성능의 변화는 없었음
+
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR, HP, AP
+  - trainset에서 이전 경기 data가 없는 row 40개 제거됨
+  - 1, 2, 3번 방식을 혼합해서 testset구성
+
+<img src="https://user-images.githubusercontent.com/58063806/120834975-b3fae100-c59e-11eb-89b6-e2ca089264fe.png" width=60% />
 
 ```python
 confusion matrix
-[[159   4  84]
- [ 83  11  75]
- [ 95   9 189]]
-acc - 50.635%
+[[120  16 112]
+ [ 49  23 100]
+ [ 46  26 225]]
+acc - 51.325%
 ```
+
+정확도는 상승했지만 데이터 분포가 잘 나뉘지 않고 승리에 치중된 결과를 보임
 
 **승리와 나머지에 대한 이진 분류**
 
 - 데이터에서 승리한 label의 개수가 가장 많았기 때문에 무승부를 패배로 변환
-  - FGD, 2HGD, HGD, SD, STD, Pezzali, HTR, HP, AP
+  - FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
 
-<img src="https://user-images.githubusercontent.com/58063806/120446215-4c893980-c3c4-11eb-99b6-ef77ecf4e08b.png" width=60%s />
+<img src="https://user-images.githubusercontent.com/58063806/120835620-86626780-c59f-11eb-97b1-763f2cf12590.png" width=60% />
 
 ```python
 confusion matrix
-[[254 162]
- [105 188]]
-acc - 62.341%
+[[256 164]
+ [106 191]]
+acc - 62.343%
 ```
+
+> 확실히 승리와 승리가 아닌 것 두가지로 예측의 범위를 좁히고 문제의 복잡도를 낮춤으로써 성능이 향상됨
+>
 
 **feature importance**
 
-<img src="https://user-images.githubusercontent.com/58063806/120449161-29fa1f00-c3ca-11eb-9ce0-02b831755295.PNG" width=60% />
+<img src="https://user-images.githubusercontent.com/58063806/120835627-88c4c180-c59f-11eb-8065-ae7145c58abb.png" width=50% />
+
+- 직접적으로 득점이 관여된 피처들이 높은 중요도를 보임
 
 - 추가적으로 홈팀과 원정팀의 3경기, 5경기에 대한 연승과 연패에 해당하는 피처를 다음과 같이 구성했으나 학습에 영향을 미치지 않음  
 
@@ -306,82 +331,139 @@ acc - 62.341%
 
 #### 지난 5경기 중 최근의 경기에 더 많은 가중치를 주기위해 지수이동평균을 적용
 
-- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
-- 지난 5경기의 맞대결 데이터만 이용
+- 지수이동평균 + 빈도에 따른 가중치
 
-<img src="https://user-images.githubusercontent.com/58063806/120754703-02c95c00-c548-11eb-807f-149b79f12d8d.png" width=60%/>
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
+- 위와 동일하게 1번과 3번 방식에 각각 0.8, 0.2의 비율을 주고 학습을 진행
+
+<img src="https://user-images.githubusercontent.com/58063806/120845648-13132280-c5ac-11eb-9b28-aa54fda0968e.png" width=60% />
 
 ```python
 confusion matrix
-[[155  26  67]
- [ 70  43  59]
- [ 77  42 178]]
-acc - 52.441%
+[[134   8 106]
+ [ 76   8  88]
+ [ 90  13 194]]
+acc - 46.862%
 ```
 
 **승리와 나머지에 대한 이진 분류**
 
-<img src="https://user-images.githubusercontent.com/58063806/120758604-001d3580-c54d-11eb-88e7-444ff9fe65c6.png" width=60% />
+<img src="https://user-images.githubusercontent.com/58063806/120845729-27efb600-c5ac-11eb-8232-d2c51dfd3490.png" width=60% />
 
 ```python
 confusion matrix
-[[288 132]
- [116 181]]
-acc - 65.411%
+[[218 202]
+ [ 95 202]]
+acc - 58.577%
 ```
 
-기존의 결과에 비해 약간의 정확도 상승을 보임
+기존의 결과에 비해 성능이 전반적으로 하락한 것을 볼 수 있음
+
+**기존의 방식대로 빈도에 의한 가중치만 주는 것이 맞다고 판단**
 
 **무승부 data를 제외한 결과**
 
 - 10091개의 데이터로 줄어듬 (testset 545개)
+- FGD, 2HGD, HGD, SD, STD, Pezzali, HTR
 
-<img src="https://user-images.githubusercontent.com/58063806/120760933-a2d6b380-c54f-11eb-9c6d-42154872d2f0.png" width=60% />
+<img src="https://user-images.githubusercontent.com/58063806/120845818-46ee4800-c5ac-11eb-8113-8c1f59216daf.png" width=60%/>
 
 ```python
 confusion matrix
-[[164  84]
- [100 197]]
-acc - 66.239%
+[[162  86]
+ [ 99 198]]
+acc - 66.055%
+```
+
+- FTHG, 2HTHG, HTHG, HS, HST, FTAG, 2HTAG, HTAG, AS, AST, HTR, FGD, 2HGD, HGD, SD, STD,    Pezzali
+
+<img src="https://user-images.githubusercontent.com/58063806/120846531-37bbca00-c5ad-11eb-8cc8-c9cdc056bf19.png" width=60% />
+
+```python
+confusion matrix
+[[162  86]
+ [ 99 198]]
+acc - 66.055%
+```
+
+역시 분포의 변화는 있었지만 성능에는 변화가 없음을 확인
+
+> 무승부 데이터를 제거한 결과 무승부 데이터를 패배 데이터와 합친 경우에 비해 패배의 경향을 좀 더 확실히 예측해서 성능이 향상된 것을 볼 수 있음
+
+#### 주성분 분석
+
+FGD, 2HGD, HGD, SD, STD, Pezzali, HTR 총 17개의 피처를 갖는 데이터를 대상으로 PCA를 진행
+
+**각 주성분이 갖는 분산의 양과 그 비율**
+
+```python
+[3.465 1.701 1.09  0.427 0.201 0.117 0.   ]
+[0.495 0.243 0.156 0.061 0.029 0.017 0.   ]
+```
+
+**누적 비율에 따른 차원 결정**
+
+누적 분산의 비율이 95%인 경우
+
+```python
+[3.465 1.701 1.09  0.427]
+[0.495 0.243 0.156 0.061]
+
+confusion matrix
+[[155  93]
+ [ 99 198]]
+acc - 64.771%
+```
+
+누적 분산의 비율이 90%인 경우
+
+ ```python
+[3.465 1.701 1.09  0.427]
+[0.495 0.243 0.156 0.061]
+
+confusion matrix
+[[155  93]
+ [ 99 198]]
+acc - 64.771%
+ ```
+
+누적 분산의 비율이 85%인 경우
+
+```python
+[3.465 1.701 1.09 ]
+[0.495 0.243 0.156]
+
+confusion matrix
+[[153  95]
+ [ 93 204]]
+acc - 65.505%
+```
+
+**개별 고유값의 크기 (분산값이 1이상인 경우를 사용)**
+
+```python
+[3.465 1.701 1.09 ]
+[0.495 0.243 0.156]
+
+confusion matrix
+[[153  95]
+ [ 93 204]]
+acc - 65.505%
 ```
 
 **2차원으로 축소된 해당 데이터로 학습**
 
 ```python
+[3.465 1.701]
+[0.495 0.243]
+
 confusion matrix
-[[160  88]
- [ 89 208]]
-acc - 67.523%
+[[159  89]
+ [100 197]]
+65.321%
 ```
 
-**동일한 데이터를 3차원으로 축소하고 해당 데이터로 학습**
-
-```python
-confusion matrix
-[[161  87]
- [ 94 203]]
-acc - 66.789%
-```
-
-**동일한 데이터를 4차원으로 축소하고 해당 데이터로 학습**
-
-```python
-confusion matrix
-[[169  79]
- [ 99 198]]
-acc - 67.339%
-```
-
-**동일한 데이터를 5차원으로 축소하고 해당 데이터로 학습**
-
-```python
-confusion matrix
-[[166  82]
- [102 195]]
-acc - 66.239%
-```
-
-**2차원으로 차원축소를 진행한 데이터로 학습한 경우에 가장 좋은 결과를 보임**
+**2차원으로 차원축소를 진행하고 학습한 경우에 가장 좋은 결과를 보였지만 원본 데이터보다는 성능이 낮았음**
 
 #### oversampling
 
@@ -393,7 +475,7 @@ acc - 66.239%
 <img src="https://user-images.githubusercontent.com/58063806/120773950-bf2d1d00-c55c-11eb-8f0e-733eb8215f58.png" width=60%, rotation=90/>
 
 ```python
-acc - 67.523%
+acc - 65.321%
 ```
 
 **k_neighbors 2 일 때**
@@ -401,7 +483,7 @@ acc - 67.523%
 <img src="https://user-images.githubusercontent.com/58063806/120765217-f3501000-c553-11eb-8b95-fe8c948452cb.png" width=60% />
 
 ```python 
-acc - 66.606%
+acc - 65.321%
 ```
 
 **k_neighbors 3 일 때**
@@ -409,7 +491,7 @@ acc - 66.606%
 <img src="https://user-images.githubusercontent.com/58063806/120765381-1da1cd80-c554-11eb-8aab-c5fbc6d00206.png" width=60% />
 
 ```python
-acc - 66.606%
+acc - 65.321%
 ```
 
 **k_neighbors 4 일 때**
@@ -417,7 +499,7 @@ acc - 66.606%
 <img src="https://user-images.githubusercontent.com/58063806/120765520-42964080-c554-11eb-8715-579302fb05fa.png" width=60% />
 
 ```python
-acc - 66.972%
+acc - 65.321%
 ```
 
 **k_neighbors 5 일 때**
@@ -425,10 +507,10 @@ acc - 66.972%
 <img src="https://user-images.githubusercontent.com/58063806/120765766-7ec9a100-c554-11eb-8a9b-5e1792c95344.png" width=60% />
 
 ```python
-acc - 66.972%
+acc - 64.771%
 ```
 
-위의 결과로 볼 때 오버샘플링을 적용한 모든 경우에서 결정경계, 성능에 거의 차이가 없었고 기존의 성능이 더 높은 것을 확인 
+위의 결과로 볼 때 오버샘플링을 적용한 모든 경우에서 기존의 결정경계, 성능과 거의 차이가 없음을 확인  
 
 
 
