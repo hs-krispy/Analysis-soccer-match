@@ -142,6 +142,7 @@ class Predict_football():
             plt.show()
 
     # ------------------ 해당 경기 홈팀과 원정팀의 이전 5경기 맞대결 데이터들의 평균 값 ------------------
+
     def H2H(self, home, away, index, ratio=1):
         selected_df = self.data[self.data.index < index]
         record = selected_df[((selected_df['HomeTeam'] == home) & (selected_df['AwayTeam'] == away)) | (
@@ -180,6 +181,7 @@ class Predict_football():
         self.df.loc[[index], ["HTR"]] = np.ravel(record["HTR"].mean(axis=0)) * ratio
 
     # ------------------ 해당 경기 홈팀의 이전 5경기 데이터 평균 값 - 해당 경기 원정팀의 이전 5경기 데이터 평균 값  ------------------
+    
     def Last_5(self, home, away, index, ratio=0.2):
         selected_df = self.data[self.data.index < index]
         home_record = selected_df[((selected_df['HomeTeam'] == home) | (selected_df['AwayTeam'] == home))].copy()
@@ -200,6 +202,7 @@ class Predict_football():
             3 - away_record.loc[(away_record['AwayTeam'] == away) & (away_record['RESULT'] != 1), ['RESULT']]
 
         if index in self.skip:
+            self.df.loc[[index], ["HTR"] + self.r_COL] = 0
             ratio = 0.5
         # 이전 10 경기 획득 승점
         if home_record.shape[0] >= 10:
@@ -247,6 +250,7 @@ class Predict_football():
         self.df.loc[[index], ["HTR"]] += (H_HTR - A_HTR + 3) / 2 * ratio
 
     # ------------------ 해당 경기 홈팀의 이전 홈 5경기 데이터 평균 값 - 해당 경기 원정팀이 이전 원정 5경기 데이터 평균 값 ------------------
+
     def Last_5_GF_GA(self, home, away, index, ratio=0.2):
         selected_df = self.data[self.data.index < index].copy()
         home_record = selected_df[selected_df['HomeTeam'] == home].copy()
@@ -267,6 +271,7 @@ class Predict_football():
         # df.loc[[index], self.r_self.COL + ['HTR']] = 0
         # 현재 경기가 상대전적 데이터가 없는 팀간의 경기일 경우
         if index in self.skip:
+            self.df.loc[[index], ["HTR"] + self.r_COL] = 0
             ratio = 1
         INDEX = home_record["RESULT"].value_counts().index
         VALUES = home_record["RESULT"].value_counts().values
@@ -317,13 +322,12 @@ class Predict_football():
         plt.savefig("pairplot.jpg")
 
     # ------------------ oversampling ------------------
+
     def oversampling(self, data, label, n=5):
         self.sampler.k_neighbors = n
         resampled_data, resampled_label = self.sampler.fit_resample(data, label)
 
         return resampled_data, resampled_label
-
-    # forest = RandomForestClassifier(random_state=42)
 
     def Train(self, data, label):
         self.clf.fit(data, np.ravel(label))
@@ -360,14 +364,10 @@ forest = RandomForestClassifier(random_state=42)
 result_prediction = Predict_football(DATA, forest)
 
 # 상대전적
-for i in tqdm(range(DATA.shape[0] - train_index)):
-    home = DATA.loc[[i + train_index], ["HomeTeam"]].values.ravel()[0]
-    away = DATA.loc[[i + train_index], ["AwayTeam"]].values.ravel()[0]
+for i, (home, away) in tqdm(enumerate(zip(DATA.HomeTeam[train_index:], DATA.AwayTeam[train_index:])), total=DATA[train_index:].shape[0]):
     result_prediction.H2H(home, away, i + train_index, 0.8)
 # 홈, 원정 개별
-for i in tqdm(range(DATA.shape[0] - train_index)):
-    home = DATA.loc[[i + train_index], ["HomeTeam"]].values.ravel()[0]
-    away = DATA.loc[[i + train_index], ["AwayTeam"]].values.ravel()[0]
+for i, (home, away) in tqdm(enumerate(zip(DATA.HomeTeam[train_index:], DATA.AwayTeam[train_index:])), total=DATA[train_index:].shape[0]):
     result_prediction.Last_5_GF_GA(home, away, i + train_index, 0.2)
 
 result_prediction.remove_draw()
