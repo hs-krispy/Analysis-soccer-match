@@ -154,21 +154,25 @@ for i in range(3, 19):
 
 #### Data quantization
 
-- 연속형 데이터에 대해 각각 10개의 구간으로 나눠서 분포를 살펴봄
+- 범위가 큰 연속형 데이터 (Pezzali)에 대해 각각 10개의 구간으로 나눠서 분포를 살펴봄
 
-<img src="https://user-images.githubusercontent.com/58063806/119519053-117b7a80-bdb4-11eb-80df-2af97f634f66.png" width=50% />
+<img src="https://user-images.githubusercontent.com/58063806/122006101-675ea380-cdf1-11eb-9369-d4fdf1ce0cdb.png" width=70% />
 
-<img src="https://user-images.githubusercontent.com/58063806/119519288-438cdc80-bdb4-11eb-96bf-d1fc64af1c36.png" width=50% />
-
-<img src="https://user-images.githubusercontent.com/58063806/119519401-59020680-bdb4-11eb-8a63-1df7ddecb094.png" width=50% />
-
-<img src="https://user-images.githubusercontent.com/58063806/119519343-4e477180-bdb4-11eb-9a17-7b8bc03f207d.png" width=50% />
-
-SD(슈팅 시도의 차이)를 제외하고는 무승부를 중심으로 승리와 패배 레이블은 확실히 구분되는 분포를 보임 
+<img src="https://user-images.githubusercontent.com/58063806/122006162-79d8dd00-cdf1-11eb-825c-7378abedf7d0.png" width=70%/>
 
 #### Data Correlation
 
-<img src="https://user-images.githubusercontent.com/58063806/120439266-49d71600-c3bd-11eb-8df8-f53a51d276eb.png" width=70% />
+- Train set
+
+<img src="https://user-images.githubusercontent.com/58063806/122007498-f15b3c00-cdf2-11eb-8935-7a43e14c2de8.png" width=60%/>
+
+- Test set
+
+<img src="https://user-images.githubusercontent.com/58063806/122007715-33847d80-cdf3-11eb-825d-605aefc58e62.png" width=60% />
+
+**Train set에 비해 Test set에서 전반적으로 Result와의 상관관계가 감소함**
+
+
 
 **홈팀과 원정팀의 차이**
 
@@ -203,6 +207,8 @@ SD(슈팅 시도의 차이)를 제외하고는 무승부를 중심으로 승리�
 > pezzali score - 홈팀의 공격시도 대비 골 * 원정팀의 공격시도 대비 골의 역수
 >
 > 공격과 수비에서 모두 효율적일수록 높은 pezzali score를 기록
+>
+> 공격시도나 상대팀의 골 수가 0인 경우 Division by Zero가 발생할 수 있기 때문에 각 요소에 0.1씩 더해서 사용했음
 >
 > 참고문헌 - The harsh rule of the goals: data-driven performance indicators for football teams
 
